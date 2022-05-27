@@ -58,10 +58,6 @@ pub fn reveal_all_tiles(game_config: &mut GameConfig) {
 }
 
 pub fn create_game_config() -> GameConfig {
-  use std::time::Instant;
-
-  let now = Instant::now();
-
   let (grid_size, bomb_count) = grid_data_input();
   let tiles = tile_creation(&grid_size, &bomb_count);
 
@@ -78,11 +74,6 @@ pub fn create_game_config() -> GameConfig {
   };
 
   let bomb_count = bomb_count.try_into().unwrap();
-
-  println!(
-    "\n\ntime to create config - {:?}\n\n",
-    now.elapsed().as_secs()
-  );
 
   GameConfig {
     grid_size,
