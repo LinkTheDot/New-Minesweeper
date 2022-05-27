@@ -39,11 +39,7 @@ pub enum GameActions {
 
 impl GameData {
   pub fn win_conditions_met(&mut self) -> bool {
-    if self.revealed_tiles == self.revealed_tiles_to_win {
-      true
-    } else {
-      false
-    }
+    self.revealed_tiles == self.revealed_tiles_to_win
   }
 }
 
@@ -62,6 +58,10 @@ pub fn reveal_all_tiles(game_config: &mut GameConfig) {
 }
 
 pub fn create_game_config() -> GameConfig {
+  use std::time::Instant;
+
+  let now = Instant::now();
+
   let (grid_size, bomb_count) = grid_data_input();
   let tiles = tile_creation(&grid_size, &bomb_count);
 
@@ -78,6 +78,11 @@ pub fn create_game_config() -> GameConfig {
   };
 
   let bomb_count = bomb_count.try_into().unwrap();
+
+  println!(
+    "\n\ntime to create config - {:?}\n\n",
+    now.elapsed().as_secs()
+  );
 
   GameConfig {
     grid_size,
@@ -219,7 +224,7 @@ pub fn tile_creation(grid_size: &usize, bomb_count: &usize) -> Grid<Tile> {
 }
 
 pub fn print_grid(game_config: &GameConfig) {
-  println!("");
+  println!();
 
   for coord_1 in 0..game_config.grid_size {
     for coord_2 in 0..game_config.grid_size {
@@ -236,7 +241,7 @@ pub fn print_grid(game_config: &GameConfig) {
       }
     }
 
-    println!("");
+    println!();
   }
 }
 

@@ -47,7 +47,7 @@ pub fn run_gameplay() {
       GameActions::IncorrectInput => println!("incorrect input"),
       GameActions::TileAlreadySelected => println!("tile already selected"),
       GameActions::TileAlreadyMarked => println!("tile is marked"),
-      GameActions::SuccessfulRun => println!(""),
+      GameActions::SuccessfulRun => println!(),
       GameActions::Win => {
         reveal_all_tiles(&mut game_config);
         print_grid(&game_config);
@@ -104,8 +104,8 @@ pub fn gameplay(game_config: &mut GameConfig) -> GameActions {
     }
 
     CursorActions::Select => {
-      if tile_at_cursor.display != "▮".to_string() {
-        if tile_at_cursor.display == "!".to_string() {
+      if tile_at_cursor.display != *"▮".to_string() {
+        if tile_at_cursor.display == *"!".to_string() {
           return GameActions::TileAlreadyMarked;
         } else {
           return GameActions::TileAlreadySelected;

@@ -88,13 +88,8 @@ impl Cursor {
 
     let mut user_input = user_input.split_whitespace();
 
-    loop {
-      let action: &str = match user_input.next() {
-        Some(x) => x.trim(),
-        None => break,
-      };
-
-      self.match_cursor_input(&action);
+    while let Some(action) = user_input.next() {
+      self.match_cursor_input(action);
 
       match self.action {
         CursorActions::Select => continue,
