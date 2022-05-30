@@ -4,6 +4,7 @@ use itertools::Itertools;
 use rand::prelude::*;
 use std::convert::TryInto;
 use std::io;
+use tuple::Map;
 
 pub struct Tile {
   pub is_bomb: bool,
@@ -254,4 +255,37 @@ pub fn grid_data_input() -> (usize, usize) {
   }
 
   (grid_size, bomb_count)
+}
+
+pub fn reveal_all_zeros_around_cursor_position(game_config: &mut GameConfig) {
+  let mut checked_tiles: Vec<Vec<usize>> = Vec::new();
+  let mut zeros = vec![vec![
+    game_config.cursor_data.position[0],
+    game_config.cursor_data.position[1],
+  ]];
+
+  loop {
+    if zeros.is_empty() {
+      break;
+    }
+
+    let checked_tiles_length = checked_tiles.len();
+    let mut coords_around = coords_around_input_coords(&mut zeros, game_config.grid_size);
+
+    zeros.append(&mut coords_around);
+    checked_tiles.append(&mut zeros);
+
+    checked_tiles = checked_tiles
+      .into_iter()
+      .unique()
+      .collect::<Vec<Vec<usize>>>();
+
+    (checked_tiles, zeros) = checked_tiles
+      .split_at(checked_tiles_length)
+      .map(|x| x.to_vec());
+    let new_zeros = reveal_tiles_return_zeros(&mut zeros, game_config);
+
+    checked_tiles.append(&mut zeros);
+    zeros = new_zeros;
+  }
 }

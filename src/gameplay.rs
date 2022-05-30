@@ -1,7 +1,5 @@
 use crate::cursor::*;
 use crate::gamedata::*;
-use itertools::Itertools;
-use tuple::Map;
 
 pub fn print_instructions() {
   println!(
@@ -115,31 +113,7 @@ pub fn gameplay(game_config: &mut GameConfig) -> GameActions {
       }
 
       if tile_at_cursor.bombs_around == 0 {
-        let mut checked_tiles: Vec<Vec<usize>> = Vec::new();
-        let mut zeros = vec![vec![coords[0], coords[1]]];
-
-        loop {
-          if zeros.is_empty() {
-            break;
-          }
-
-          let checked_len = checked_tiles.len();
-          let mut coords_around = coords_around_input_coords(&mut zeros, game_config.grid_size);
-
-          zeros.append(&mut coords_around);
-          checked_tiles.append(&mut zeros);
-
-          checked_tiles = checked_tiles
-            .into_iter()
-            .unique()
-            .collect::<Vec<Vec<usize>>>();
-
-          (checked_tiles, zeros) = checked_tiles.split_at(checked_len).map(|x| x.to_vec());
-          let new_zeros = reveal_tiles_return_zeros(&mut zeros, game_config);
-
-          checked_tiles.append(&mut zeros);
-          zeros = new_zeros;
-        }
+        reveal_all_zeros_around_cursor_position(game_config);
       } else {
         tile_at_cursor.display = tile_at_cursor.bombs_around.to_string();
         tile_at_cursor.been_revealed = true;
