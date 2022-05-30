@@ -75,8 +75,13 @@ pub fn gameplay(game_config: &mut GameConfig) -> GameActions {
 
   game_config.cursor_data.cursor_input(game_config.grid_size);
 
-  let coords = game_config.cursor_data.position;
-  let tile_at_cursor = game_config.tiles.get_mut(coords[0], coords[1]).unwrap();
+  let tile_at_cursor = game_config
+    .tiles
+    .get_mut(
+      game_config.cursor_data.position[0],
+      game_config.cursor_data.position[1],
+    )
+    .unwrap();
 
   match game_config.cursor_data.action {
     CursorActions::FailedInput => {
